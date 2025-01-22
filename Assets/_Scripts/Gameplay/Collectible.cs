@@ -11,16 +11,6 @@ namespace _Scripts.Gameplay
         public AudioClip pickUpSound;
         [Inject]
         private GameManager _gameManager;
-        
-        private bool _isPickedUp = false; 
-        public bool IsPickedUp
-        {
-            get => _isPickedUp;
-            set
-            {
-                _isPickedUp = value;
-            }
-        }
 
         private void Awake()
         {

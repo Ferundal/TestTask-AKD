@@ -6,8 +6,6 @@ namespace _Scripts.Gameplay
 {
     public class GameManager : MonoBehaviour
     {
-        [SerializeField]
-        private Transform playerPickedUpItemPosition;
         [Inject]
         private SoundManager _soundManager;
 
@@ -18,9 +16,20 @@ namespace _Scripts.Gameplay
             get => _currentCollectible;
             set
             {
-                if(_currentCollectible != null)
+                if (_currentCollectible == value || (_currentCollectible != null && value != null))
+                {
                     return;
-                PickUp(value);
+                }
+                
+                if (value == null)
+                {
+                    _soundManager.PlaySFX(_currentCollectible.pickUpSound);
+                }
+                else
+                {
+                    _soundManager.PlaySFX(value.pickUpSound);
+                    value.gameObject.SetActive(false);
+                }
                 _currentCollectible = value;
             }
         }
@@ -28,16 +37,8 @@ namespace _Scripts.Gameplay
         private void Start()
         {
             _soundManager.PlayGameMusic();
-        }
-
-        private void PickUp(Collectible collectible)
-        {
-            collectible.transform.SetParent(playerPickedUpItemPosition);
-            collectible.transform.localPosition = Vector3.zero;
-            collectible.transform.localRotation = Quaternion.identity;
-            collectible.IsPickedUp = true;
-            _soundManager.PlaySFX(collectible.pickUpSound);
-            
+            _soundManager.SetMusicVolume(0.5f);
+            _soundManager.SetSFXVolume(2f);
         }
     }
 }
